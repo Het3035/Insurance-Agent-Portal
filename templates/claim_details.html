@@ -1,0 +1,45 @@
+{% include "header.html" %}
+
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm">
+
+    <h4>Claim – Policy {{ policy.policy_no }}</h4>
+
+    <p>
+      <strong>Remaining Sum Insured:</strong>
+      ₹ {{ "{:,}".format(policy.remaining_sum_insured | default(policy.sum_insured)) }}
+    </p>
+
+    <form method="post">
+
+      <label>Claimee</label>
+      <select name="claimee_name" class="form-control mb-3">
+        <option value="{{ proposer.name }}">Proposer – {{ proposer.name }}</option>
+        {% for m in members %}
+          <option value="{{ m.name }}">{{ m.name }} ({{ m.relation }})</option>
+        {% endfor %}
+      </select>
+
+      <label>Claim Type</label>
+      <select name="claim_type" class="form-control mb-3">
+        <option>Hospitalization</option>
+        <option>Accident</option>
+        <option>Critical Illness</option>
+      </select>
+
+      <label>Amount</label>
+      <input type="number" name="amount" class="form-control mb-3" required>
+
+      <label>Incident Date</label>
+      <input type="date" name="incident_date" class="form-control mb-3" required>
+
+      <label>Description</label>
+      <textarea name="description" class="form-control mb-3"></textarea>
+
+      <button class="btn btn-primary">Submit Claim</button>
+
+    </form>
+  </div>
+</div>
+
+{% include "footer.html" %}

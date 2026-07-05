@@ -1,0 +1,196 @@
+{% include "header.html" %}
+
+<div class="container mt-4">
+
+  <h3 class="text-primary mb-4">📊 Agent Reports</h3>
+
+  <!-- ================= SUMMARY ================= -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-4">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <h6>Total Policies</h6>
+          <h2 class="text-primary">{{ total_policies }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <h6>Active Policies</h6>
+          <h2 class="text-success">{{ active_policies }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <h6>Expired Policies</h6>
+          <h2 class="text-danger">{{ expired_policies }}</h2>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= COMPANY WISE ================= -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="text-primary mb-3">🏢 Company-wise Policies</h5>
+
+      <table class="table table-bordered">
+        <tr>
+          <th>Company</th>
+          <th>No. of Policies</th>
+        </tr>
+        {% for c in company_report %}
+        <tr>
+          <td>{{ c._id }}</td>
+          <td>{{ c.count }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <!-- ================= PREMIUM REPORT ================= -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="text-primary mb-3">💰 Premium Collection</h5>
+
+      <table class="table table-bordered">
+        <tr>
+          <th>Company</th>
+          <th>Total Premium (₹)</th>
+        </tr>
+        {% for p in premium_report %}
+        <tr>
+          <td>{{ p._id }}</td>
+          <td>₹ {{ "{:,.2f}".format(p.total_premium) }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <!-- ================= CLAIM SUMMARY ================= -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <h6>Total Claims</h6>
+          <h2 class="text-warning">{{ total_claims }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <h6>Total Claimed Amount</h6>
+          <h2 class="text-danger">
+            ₹ {{ "{:,.2f}".format(total_claim_amount) }}
+          </h2>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= CLAIM DETAILS ================= -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <h5 class="text-danger mb-3">🧾 Claim Details</h5>
+
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Policy No</th>
+            <th>Company</th>
+            <th>Claimee</th>
+            <th>Amount (₹)</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for c in claim_list %}
+          <tr>
+            <td>{{ c.policy_no }}</td>
+            <td>{{ c.company }}</td>
+            <td>{{ c.claimee }}</td>
+            <td>₹ {{ "{:,}".format(c.amount) }}</td>
+            <td>
+              <span class="badge 
+                {% if c.status == 'Approved' %}bg-success
+                {% elif c.status == 'Rejected' %}bg-danger
+                {% else %}bg-warning{% endif %}">
+                {{ c.status }}
+              </span>
+            </td>
+            <td>
+              {{ c.date.strftime('%d-%m-%Y') if c.date else '-' }}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" class="text-center text-muted">
+              No claims found
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- ================= UPCOMING RENEWALS ================= -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="text-warning mb-3">🔔 Upcoming Renewals (Next 30 Days)</h5>
+
+      <table class="table table-bordered">
+        <tr>
+          <th>Policy No</th>
+          <th>Company</th>
+          <th>Expiry Date</th>
+          <th>Action</th>
+        </tr>
+        {% for p in upcoming %}
+        <tr>
+          <td>{{ p.policy_no }}</td>
+          <td>{{ p.company }}</td>
+          <td>{{ p.end_date.strftime('%d-%m-%Y') }}</td>
+          <td class="d-flex gap-2 flex-wrap">
+            <a href="/renew-policy/{{ p.policy_no }}" class="btn btn-sm btn-warning">
+              Renew
+            </a>
+
+            <form action="/send-renewal-email/{{ p.policy_no }}" method="post">
+              <button type="submit" class="btn btn-sm btn-info">
+                📧 Send Mail
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" class="text-center text-muted">
+            No upcoming renewals
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+</div>
+
+{% include "footer.html" %}

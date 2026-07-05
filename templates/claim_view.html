@@ -1,0 +1,78 @@
+{% include "header.html" %}
+
+<div class="container mt-4 mb-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+
+      <h4 class="text-primary mb-3">
+        🧾 Claim Details
+      </h4>
+
+      <table class="table table-bordered">
+        <tr>
+          <th>Claim ID</th>
+          <td>{{ claim.claim_id }}</td>
+        </tr>
+
+        <tr>
+          <th>Policy Number</th>
+          <td>{{ policy.policy_no }}</td>
+        </tr>
+
+        <tr>
+          <th>Company</th>
+          <td>{{ policy.company }}</td>
+        </tr>
+
+        <tr>
+          <th>Claimee</th>
+          <td>{{ claim.claimee_name }}</td>
+        </tr>
+
+        <tr>
+          <th>Claim Type</th>
+          <td>{{ claim.claim_type }}</td>
+        </tr>
+
+        <tr>
+          <th>Claim Amount</th>
+          <td class="fw-bold text-danger">
+            ₹ {{ "{:,}".format(claim.amount) }}
+          </td>
+        </tr>
+
+        <tr>
+          <th>Incident Date</th>
+          <td>{{ claim.incident_date.strftime('%d-%m-%Y') }}</td>
+        </tr>
+
+        <tr>
+          <th>Status</th>
+          <td class="fw-bold text-success">
+            {{ claim.status }}
+          </td>
+        </tr>
+
+        <tr>
+          <th>Description</th>
+          <td>{{ claim.description }}</td>
+        </tr>
+
+        <tr>
+          <th>Created At</th>
+          <td>{{ claim.created_at.strftime('%d-%m-%Y %I:%M %p') }}</td>
+        </tr>
+      </table>
+
+      <div class="mt-3">
+        <a href="/policy/{{ policy.policy_no }}"
+           class="btn btn-secondary">
+          ← Back to Policy
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}

@@ -1,0 +1,110 @@
+{% include "header.html" %}
+
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm">
+
+    <h4 class="text-primary mb-3">🧾 Raise Claim</h4>
+
+    <!-- SEARCH FORM -->
+    <form method="post" class="mb-4">
+      <div class="mb-3">
+        <label class="fw-semibold">
+          Enter Policy No / Mobile / Email
+        </label>
+        <input
+          type="text"
+          name="search"
+          class="form-control"
+          placeholder="Policy Number or Mobile or Email"
+          required
+        >
+      </div>
+
+      <button class="btn btn-success">
+        Search Policy
+      </button>
+    </form>
+
+    <!-- POLICY LIST -->
+    {% if policies %}
+    <hr>
+
+    <h5 class="text-secondary mb-3">Select Policy for Claim</h5>
+
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle text-center">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Policy No</th>
+            <th>Company</th>
+            <th>Proposer</th>
+            <th>Mobile</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for p in policies %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ p.policy_no }}</td>
+            <td>{{ p.company }}</td>
+            <td>{{ p.proposer.name }}</td>
+            <td>{{ p.proposer.contact.phone }}</td>
+            <td>
+              <a href="/claim/{{ p.policy_no }}"
+                 class="btn btn-primary btn-sm">
+                Select for Claim
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<!-- ================= NO POLICY MODAL ================= -->
+<div class="modal fade" id="noPolicyModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">No Policy Found</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p class="mb-0">
+          No policy found for the entered
+          <strong>Policy No / Mobile / Email</strong>.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal">
+          OK
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% if no_policy %}
+<script>
+  var modal = new bootstrap.Modal(
+    document.getElementById("noPolicyModal")
+  );
+  modal.show();
+</script>
+{% endif %}
+
+{% include "footer.html" %}

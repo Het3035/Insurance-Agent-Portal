@@ -1,0 +1,159 @@
+{% include "header.html" %}
+
+<style>
+  body {
+    background-color: #f4f6fb;
+    font-family: "Segoe UI", Roboto, sans-serif;
+  }
+
+  .dashboard-card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid #e0e6ed;
+  }
+
+  .dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  }
+
+  .welcome-card {
+    background: linear-gradient(90deg,#0d6efd,#0b5ed7);
+    color: #fff;
+    border: none;
+  }
+
+  .welcome-card p {
+    color: #e8ecff;
+  }
+
+  .kpi-number {
+    font-size: 2.4rem;
+    font-weight: 700;
+  }
+
+  .btn-soft {
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 500;
+    transition: 0.2s;
+  }
+
+  .btn-soft:hover {
+    transform: scale(1.05);
+  }
+
+  .card-title {
+    font-weight: 600;
+    border-bottom: 2px solid #f0f2f8;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+
+  .search-box input,
+  .search-box button {
+    height: 48px;
+    border-radius: 8px;
+  }
+
+  .sidebar {
+    min-height: 100%;
+  }
+</style>
+
+<div class="container-fluid py-4">
+
+  <!-- ================= WELCOME ================= -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card dashboard-card welcome-card shadow-lg">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+          <div>
+            <h3 class="fw-bold mb-1">Welcome, {{ session.agent_name }}</h3>
+            <p class="mb-0">Insurance Policy Management Dashboard</p>
+          </div>
+          <div class="mt-3 mt-md-0">
+            <a href="/add-policy" class="btn btn-light btn-soft me-2">➕ Add Policy</a>
+            <a href="/view-policies" class="btn btn-outline-light btn-soft me-2">📄 Policies</a>
+            <a href="/reports" class="btn btn-warning btn-soft">📊 Reports</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN LAYOUT ================= -->
+  <div class="row g-4">
+
+    <!-- Sidebar Quick Actions -->
+    <div class="col-lg-3">
+      <div class="card dashboard-card shadow-sm sidebar">
+        <div class="card-body">
+          <h5 class="text-primary card-title">Quick Actions</h5>
+          <div class="d-flex flex-column gap-3">
+            <a href="/add-policy" class="btn btn-outline-primary btn-soft w-100">➕ Issue New Policy</a>
+            <a href="/view-policies" class="btn btn-outline-secondary btn-soft w-100">🔍 Search Policies</a>
+            <a href="/view-policies" class="btn btn-outline-warning btn-soft w-100">🔄 Renew Policy</a>
+            <a href="/claims" class="btn btn-outline-primary btn-soft w-100">🧾 Claims</a>
+            <a href="/reports" class="btn btn-outline-info btn-soft w-100">📊 View Reports</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-9">
+
+      <!-- KPI Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card dashboard-card shadow-sm text-center h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Total Policies</h6>
+              <div class="kpi-number text-primary">{{ total_policies }}</div>
+              <small class="text-muted">Issued till date</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card dashboard-card shadow-sm text-center h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Insurance Companies</h6>
+              <div class="kpi-number text-success">3</div>
+              <small class="text-muted">ICICI · New India · TATA AIG</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card dashboard-card shadow-sm text-center h-100">
+            <div class="card-body">
+              <h6 class="text-muted">System Status</h6>
+              <h4 class="fw-bold text-success mt-2">Operational</h4>
+              <small class="text-muted">No issues detected</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Renewal -->
+      <div class="card dashboard-card shadow-sm">
+        <div class="card-body search-box">
+          <h5 class="text-primary card-title">Quick Policy Renewal</h5>
+          <form action="/view-policies" method="get" class="row g-3 align-items-center">
+            <div class="col-md-9">
+              <input type="text" name="search" class="form-control" placeholder="Enter Policy Number">
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-warning w-100 btn-soft">🔄 Search</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}

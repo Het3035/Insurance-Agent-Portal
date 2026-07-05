@@ -1,0 +1,32 @@
+{% include 'header.html' %}
+
+<div class="container mt-5 d-flex justify-content-center">
+
+  <div class="card shadow-sm border-0 p-4" style="width:400px; border-radius:16px;">
+    <h3 class="text-center text-primary mb-3">Add Policy</h3>
+    <p class="text-center text-muted">Enter policy details</p>
+
+    <form method="post" action="/add-policy">
+
+      <label class="form-label">Number of Persons</label>
+      <input type="number" name="member_count" class="form-control mb-3" min="1" max="10" required placeholder="Enter Number of Person">
+
+      <label class="form-label">Sum Insured</label>
+      <select name="si" class="form-select mb-4" required>
+        <option value="500000">5 Lakh</option>
+        <option value="1000000">10 Lakh</option>
+        <option value="1500000">15 Lakh</option>
+        <option value="2500000">25 Lakh</option>
+        <option value="5000000">50 Lakh</option>
+        <option value="7500000">75 Lakh</option>
+        <option value="10000000">1 Crore</option>
+      </select>
+
+      <button type="submit" class="btn btn-primary w-100">Next</button>
+
+    </form>
+  </div>
+
+</div>
+
+{% include 'footer.html' %}

@@ -1,0 +1,123 @@
+{% include 'header.html' %}
+
+<div class="container mt-4 mb-5">
+
+  <h3 class="text-center mb-4">Proposer Details</h3>
+
+  <form method="post" id="policyForm">
+
+  
+    <h4>Policy Period</h4>
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <label class="form-label">Start Date</label>
+        <input type="date" name="start_date" id="start_date" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label disabled">End Date</label>
+        <input type="date" name="end_date" id="end_date" class="form-control" readonly required>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ================= PROPOSER ================= -->
+    <h4>Proposer Information</h4>
+
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">Full Name</label>
+        <input name="proposer_name" class="form-control" placeholder="Full Name" required>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Aadhaar</label>
+        <input name="proposer_aadhaar" class="form-control aadhaar" placeholder="Aadhaar (XXXX XXXX XXXX)" required>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">DOB & Age</label>
+        <div class="d-flex gap-2">
+          <input type="date" class="form-control" value="{{ dobs[0] }}" readonly>
+          <input type="number" class="form-control" value="{{ ages[0] }}" readonly>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ================= CONTACT ================= -->
+    <h5>Contact Details</h5>
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <input name="proposer_mobile" class="form-control" placeholder="Mobile Number" required>
+      </div>
+
+      <div class="col-md-6">
+        <input name="proposer_email" class="form-control" placeholder="Email Address" required>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ================= OTHER MEMBERS ================= -->
+    {% for i in range(member_count - 1) %}
+    <h5>Member {{ i + 2 }}</h5>
+
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <input name="name[]" class="form-control" placeholder="Name" required>
+      </div>
+
+      <div class="col-md-3">
+        <input name="aadhaar[]" class="form-control aadhaar" placeholder="Aadhaar" required>
+      </div>
+
+      <div class="col-md-3">
+        <input name="relation[]" class="form-control" placeholder="Relation" required>
+      </div>
+
+      <div class="col-md-3">
+        <div class="d-flex gap-2">
+          <input type="date" class="form-control" value="{{ dobs[i + 1] }}" readonly>
+          <input type="number" class="form-control" value="{{ ages[i + 1] }}" readonly>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <button class="btn btn-primary btn-lg w-100 mt-4">
+      Issue Policy
+    </button>
+
+  </form>
+</div>
+
+<!-- ================= AADHAAR FORMAT SCRIPT ================= -->
+<script>
+  document.querySelectorAll(".aadhaar").forEach(input => {
+    input.addEventListener("input", function () {
+      let value = this.value.replace(/\D/g, "").substring(0, 12);
+      let formatted = value.match(/.{1,4}/g);
+      this.value = formatted ? formatted.join(" ") : value;
+    });
+  });
+
+  document.getElementById("policyForm").addEventListener("submit", function () {
+    document.querySelectorAll(".aadhaar").forEach(input => {
+      input.value = input.value.replace(/\s/g, "");
+    });
+  });
+</script>
+
+<!-- ================= END DATE AUTO +1 YEAR ================= -->
+<script>
+  document.getElementById("start_date").addEventListener("change", function () {
+    let d = new Date(this.value);
+    d.setFullYear(d.getFullYear() + 1);
+    document.getElementById("end_date").value =
+      d.toISOString().split("T")[0];
+  });
+</script>
+
+{% include 'footer.html' %}

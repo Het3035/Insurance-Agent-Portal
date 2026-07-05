@@ -1,0 +1,219 @@
+{% include 'header.html' %}
+
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+
+      <div class="card shadow-lg border-0">
+
+        <!-- HEADER -->
+        <div class="card-header text-center"
+             style="background:linear-gradient(90deg,#0d6efd,#0b5ed7);color:white;">
+          <h4 class="mb-0">Renew / Modify Policy</h4>
+        </div>
+
+        <div class="card-body p-4">
+
+          <!-- POLICY NUMBER -->
+          <div class="text-center mb-3">
+            <span class="badge px-4 py-2 fs-6"
+                  style="background:#f2f2f2;color:#000;">
+              Policy No :
+              <strong>{{ policy.policy_no }}</strong>
+            </span>
+          </div>
+
+          <!-- CURRENT DETAILS -->
+          <div class="alert alert-info text-center">
+            <strong>Company :</strong> {{ policy.company }} <br>
+            <strong>Sum Insured :</strong>
+            ₹ {{ "{:,}".format(policy.sum_insured) }} <br>
+            <strong>Total Premium :</strong>
+            ₹ {{ "{:,.2f}".format(policy.premium) }}
+          </div>
+
+          <!-- ================= RENEW DATES ================= -->
+          <h5 class="text-primary mb-3">Renew Policy Dates</h5>
+
+          <form method="post" class="mb-4">
+            <input type="hidden" name="action" value="renew">
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">New Start Date</label>
+                <input type="date"
+                       name="start_date"
+                       id="start_date"
+                       class="form-control"
+                       required>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold disabled">New End Date</label>
+                <input type="date"
+                       name="end_date"
+                       id="end_date"
+                       class="form-control"
+                       readonly
+                       required>
+              </div>
+            </div>
+
+            <button class="btn btn-primary">
+              Renew Policy (Reset Claims)
+            </button>
+          </form>
+
+          <hr>
+
+          <!-- ================= CHANGE COMPANY + SUM INSURED ================= -->
+          <h5 class="text-info mb-2">Change Company / Sum Insured</h5>
+          <p class="text-muted mb-3">
+            Premium will be recalculated based on selected company,
+            sum insured and members’ ages. Previous claims will be reset.
+          </p>
+
+          <form method="post" class="mb-4">
+            <input type="hidden" name="action" value="change_company_si">
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Select Company</label>
+                <select name="company" class="form-select" required>
+                  <option value="">-- Select Company --</option>
+                  <option value="ICICI">ICICI</option>
+                  <option value="NEW_INDIA">New India</option>
+                  <option value="TATA_AIG">TATA AIG</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Select Sum Insured</label>
+                <select name="new_si" class="form-select" required>
+                  <option value="">-- Select Sum Insured --</option>
+                  <option value="500000">5 Lakh</option>
+                  <option value="1000000">10 Lakh</option>
+                  <option value="1500000">15 Lakh</option>
+                  <option value="2500000">25 Lakh</option>
+                  <option value="5000000">50 Lakh</option>
+                  <option value="7500000">75 Lakh</option>
+                  <option value="10000000">1 Crore</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn btn-info">
+              Update Company & Recalculate Premium
+            </button>
+          </form>
+
+          <hr>
+
+          <!-- ================= ADD MEMBER ================= -->
+          <h5 class="text-success mb-3">Add New Member</h5>
+
+          <form method="post" class="row g-3 mb-4">
+            <input type="hidden" name="action" value="add">
+
+            <div class="col-md-6">
+              <label class="form-label">Name</label>
+              <input type="text" name="name" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Aadhaar</label>
+              <input type="text"
+                     name="aadhaar"
+                     pattern="\d{12}"
+                     class="form-control"
+                     required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Relation</label>
+              <input type="text" name="relation" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Date of Birth</label>
+              <input type="date" name="dob" class="form-control" required>
+            </div>
+
+            <div class="col-12">
+              <button class="btn btn-success">
+                Add Member & Update Premium
+              </button>
+            </div>
+          </form>
+
+          <!-- ================= INSURED MEMBERS ================= -->
+          <h5 class="text-danger mb-3">Insured Members</h5>
+
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle text-center">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Relation</th>
+                  <th>Age</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for m in policy.insured_members %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ m.name }}</td>
+                  <td>{{ m.relation }}</td>
+                  <td>{{ m.age }}</td>
+                  <td>
+                    <form method="post">
+                      <input type="hidden" name="action" value="remove">
+                      <input type="hidden" name="member_index" value="{{ loop.index0 }}">
+                      <button class="btn btn-sm btn-danger">
+                        Remove
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="5" class="text-muted">No insured members</td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+
+          <!-- FOOTER -->
+          <div class="d-flex justify-content-between mt-4">
+            <a href="/policy/{{ policy.policy_no }}" class="btn btn-secondary">
+              Back to Policy
+            </a>
+
+            <a href="/view-policies" class="btn btn-outline-primary">
+              View All Policies
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= END DATE AUTO +1 YEAR ================= -->
+<script>
+  document.getElementById("start_date").addEventListener("change", function () {
+    let d = new Date(this.value);
+    d.setFullYear(d.getFullYear() + 1);
+    document.getElementById("end_date").value =
+      d.toISOString().split("T")[0];
+  });
+</script>
+
+{% include 'footer.html' %}

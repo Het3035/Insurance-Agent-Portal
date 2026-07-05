@@ -1,0 +1,137 @@
+{% include "header.html" %}
+
+<div class="container mt-4">
+  <div class="card shadow-sm p-4">
+
+    <h3 class="text-primary text-center mb-3">Policies</h3>
+
+    <!-- SEARCH & FILTER -->
+    <form method="get" class="row g-2 mb-3">
+      <div class="col-md-6">
+        <input type="text"
+               name="search"
+               value="{{ search }}"
+               class="form-control"
+               placeholder="Search by Policy No / Phone / Email">
+      </div>
+
+      <div class="col-md-4">
+        <select name="company" class="form-select">
+          <option value="">All Companies</option>
+          <option value="TATA_AIG" {{ 'selected' if company=='TATA_AIG' else '' }}>TATA AIG</option>
+          <option value="NEW_INDIA" {{ 'selected' if company=='NEW_INDIA' else '' }}>New India</option>
+          <option value="ICICI" {{ 'selected' if company=='ICICI' else '' }}>ICICI</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100">Apply</button>
+      </div>
+    </form>
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle text-center">
+
+        <thead class="table-primary">
+          <tr>
+            <th>Policy No</th>
+            <th>Company</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for p in policies %}
+          <tr>
+            <td><strong>{{ p.policy_no }}</strong></td>
+            <td>{{ p.company }}</td>
+            <td>{{ p.start_date }}</td>
+            <td>{{ p.end_date }}</td>
+
+            <td>
+              {% if p.end_date and p.end_date > now %}
+                <span class="badge bg-success">Active</span>
+              {% else %}
+                <span class="badge bg-danger">Expired</span>
+              {% endif %}
+            </td>
+
+            <td class="d-flex justify-content-center gap-2">
+              <a href="/policy/{{ p.policy_no }}"
+                 class="btn btn-sm btn-outline-primary">
+                 View
+              </a>
+
+              <!-- <a href="/renew-policy/{{ p.policy_no }}"
+                 class="btn btn-sm btn-warning">
+                 Renew
+              </a> -->
+
+              <!-- DELETE BUTTON -->
+              <button class="btn btn-sm btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal{{ p.policy_no }}">
+                Delete
+              </button>
+            </td>
+          </tr>
+
+          <!-- DELETE CONFIRM MODAL (SAME AS SCREENSHOT) -->
+          <div class="modal fade" id="deleteModal{{ p.policy_no }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content rounded-3 shadow">
+
+                <!-- HEADER -->
+                <div class="modal-header bg-danger text-white">
+                  <h5 class="modal-title">Confirm Delete</h5>
+                  <button type="button"
+                          class="btn-close btn-close-white"
+                          data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- BODY -->
+                <div class="modal-body text-center">
+                  <p class="mb-2">
+                    Are you sure you want to delete this policy?
+                  </p>
+                  <strong>Policy No: {{ p.policy_no }}</strong>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer justify-content-center">
+                  <button type="button"
+                          class="btn btn-secondary px-4"
+                          data-bs-dismiss="modal">
+                    Cancel
+                  </button>
+
+                  <form method="POST" action="/remove-policy/{{ p.policy_no }}">
+                    <button type="submit"
+                            class="btn btn-danger px-4">
+                      Yes, Delete
+                    </button>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        {% else %}
+          <tr>
+            <td colspan="6" class="text-muted">No policies found</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+
+{% include "footer.html" %}

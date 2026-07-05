@@ -1,0 +1,36 @@
+{% include 'header.html' %}
+
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-sm border-0 p-4" style="width:450px; border-radius:16px;">
+
+    <h3 class="text-center text-primary mb-3">Enter Member Birth Dates</h3>
+    <p class="text-center text-muted">
+      First DOB must be <b>Proposer Date of Birth</b>
+    </p>
+
+    <form method="post">
+
+      {% for i in range(count) %}
+      <div class="mb-3">
+        <label class="form-label">
+          {% if i == 0 %}
+          Proposer Date of Birth
+          {% else %}
+          Member {{ i+1 }} Date of Birth
+          {% endif %}
+        </label>
+
+        <input type="date" name="dob" class="form-control" required>
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary w-100">
+        Get Quotation
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+{% include 'footer.html' %}

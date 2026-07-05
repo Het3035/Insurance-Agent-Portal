@@ -1,0 +1,113 @@
+{% include "header.html" %}
+
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow border-0 p-4" style="width:380px;border-radius:16px;">
+
+    <h3 class="text-center text-primary mb-3">Agent Login</h3>
+    <p class="text-center text-muted">Sign in to access your dashboard</p>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" method="post">
+
+      <input type="email"
+             name="email"
+             class="form-control mb-3"
+             placeholder="Enter Email"
+             required>
+
+      <input type="password"
+             name="password"
+             class="form-control mb-3"
+             placeholder="Enter Password"
+             required>
+
+      <!-- BUTTON OPENS CONFIRM MODAL -->
+      <button type="button"
+              class="btn btn-primary w-100"
+              data-bs-toggle="modal"
+              data-bs-target="#loginConfirmModal">
+        Login
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+<!-- ================= LOGIN CONFIRMATION MODAL ================= -->
+<div class="modal fade" id="loginConfirmModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Confirm Login</h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p class="mb-0">
+          Do you want to login and access your dashboard?
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal">
+          No
+        </button>
+
+        <button type="submit"
+                class="btn btn-primary"
+                form="loginForm">
+          Login
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= INVALID LOGIN MODAL ================= -->
+<div class="modal fade" id="invalidLoginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Login Failed</h5>
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p class="mb-0">
+          Invalid <strong>Email</ strong> or <strong>Password</strong><br>
+          Please try again.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal">
+          OK
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% if invalid_login %}
+<script>
+  var modal = new bootstrap.Modal(
+    document.getElementById("invalidLoginModal")
+  );
+  modal.show();
+</script>
+{% endif %}
+
+{% include "footer.html" %}

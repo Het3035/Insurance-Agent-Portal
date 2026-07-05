@@ -1,0 +1,96 @@
+{% include "header.html" %}
+
+<div class="container mt-4">
+  <div class="card shadow-sm p-4">
+
+    <h3 class="text-primary text-center mb-3">
+      Quotation Summary
+    </h3>
+
+    <p class="text-muted text-center">
+      Sum Insured:
+      <strong>₹ {{ "{:,}".format(q.si) }}</strong>
+    </p>
+
+    <!-- MEMBER BREAKDOWN -->
+    <div class="table-responsive mb-4">
+      <table class="table table-bordered text-center align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Member</th>
+            <th>Age</th>
+            <th>ICICI</th>
+            <th>New India</th>
+            <th>TATA AIG</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for m in q.members %}
+          <tr>
+            <td>Member {{ loop.index }}</td>
+            <td>{{ m.age }}</td>
+            <td>₹ {{ m.ICICI }}</td>
+            <td>₹ {{ m.NEW_INDIA }}</td>
+            <td>₹ {{ m.TATA_AIG }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TOTAL PREMIUM -->
+    <div class="row text-center mb-4">
+
+      <div class="col-md-4">
+        <div class="card border-success">
+          <div class="card-body">
+            <h6 class="text-muted">ICICI</h6>
+            <h4 class="text-success">₹ {{ q.total.ICICI }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-warning">
+          <div class="card-body">
+            <h6 class="text-muted">New India</h6>
+            <h4 class="text-warning">₹ {{ q.total.NEW_INDIA }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-primary">
+          <div class="card-body">
+            <h6 class="text-muted">TATA AIG</h6>
+            <h4 class="text-primary">₹ {{ q.total.TATA_AIG }}</h4>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SELECT COMPANY -->
+    <form method="post" class="text-center">
+      <h5 class="mb-3">Select Company to Proceed</h5>
+
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <button name="company" value="ICICI" class="btn btn-outline-success">
+          ICICI
+        </button>
+
+        <button name="company" value="NEW_INDIA" class="btn btn-outline-warning">
+          New India
+        </button>
+
+        <button name="company" value="TATA_AIG" class="btn btn-outline-primary">
+          TATA AIG
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+{% include "footer.html" %}
